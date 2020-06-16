@@ -1,0 +1,15 @@
+{
+  "name": "toy_problems",
+  "version": "1.0.0",
+  "description": "toy problems with TDD :D",
+  "main": "index.js",
+  "dependencies": {
+    "jest": "^26.0.1"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "jest --watchAll"
+  },
+  "author": "",
+  "license": "ISC"
+}
