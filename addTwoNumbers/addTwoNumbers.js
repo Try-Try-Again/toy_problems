@@ -43,21 +43,14 @@
  * Verified :)
  */
 
-const addTwoNumbers = (linked1, linked2) => {
-  const addNodes = (node1, node2, carry) => {
-    const sum = node1.val + node2.val + carry;
-    const nextCarry = Math.floor(sum / 10);
-    return {
-      val: sum % 10,
-      next: node1.next || node2.next || nextCarry > 0
-        ? addNodes(
-          node1.next || { val: 0, next: null},
-          node2.next || { val: 0, next: null},
-          nextCarry)
-        : null,
-    };
-  };
-  return addNodes(linked1, linked2, 0);
-};
+const addTwoNumbers = (linked1, linked2, carry = 0) => ({
+  val: (linked1.val + linked2.val + carry) % 10,
+  next: linked1.next || linked2.next || (linked1.val + linked2.val + carry) > 9
+    ? addTwoNumbers(
+      linked1.next || {val: 0, next: null},
+      linked2.next || {val: 0, next: null},
+      Math.floor((linked1.val + linked2.val + carry) / 10))
+    : null,
+});
 
 module.exports = { addTwoNumbers }
