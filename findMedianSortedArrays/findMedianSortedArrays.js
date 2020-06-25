@@ -7,7 +7,7 @@
  * Time Complexity:
  * O(log(m+n))
  * Spacial Complexity:
- * O(m+n)
+ * O(1)
  * Edge Cases:
  * [1, 3], [2] => 2.0
  * [1, 2], [3, 4] => (2 + 3) / 2.5
@@ -47,26 +47,32 @@
  *    return either the center number (if odd length)
  *    or the average of the two center values (if even length)
  */
+var findMedianSortedArrays = function(nums1, nums2) {
+  if(nums1.length > nums2.length) return findMedianSortedArrays(nums2, nums1)
+  let x = nums1.length
+  let y = nums2.length
+  let low = 0, high = x
+  while(low <= high) {
+    const partitionX = (high + low) >> 1
+    const partitionY = ((x + y + 1) >> 1) - partitionX
 
-const findMedianSortedArrays = (numsA, numsB) => {
+    const maxX = partitionX == 0 ? Number.NEGATIVE_INFINITY : nums1[partitionX - 1]
+    const maxY = partitionY == 0 ? Number.NEGATIVE_INFINITY : nums2[partitionY - 1]
 
-  const median = (nums) => nums.length % 2 === 1
-    ? nums[Math.floor(nums.length / 2)]
-    : (nums[Math.floor(nums.length / 2) - 1] + nums[Math.ceil(nums.length / 2)]) / 2;
+    const minX = partitionX == nums1.length ? Number.POSITIVE_INFINITY : nums1[partitionX]
+    const minY = partitionY == nums2.length ? Number.POSITIVE_INFINITY : nums2[partitionY ]
 
-  let result = [], aI = 0, bI = 0, aLen = numsA.length, bLen = numsB.length;
-
-  while (aI < aLen && bI < bLen) {
-    if (numsA[aI] < numsB[bI]) {
-      result.push(numsA[aI]);
-      aI += 1;
-    } else {
-      result.push(numsB[bI]);
-      bI += 1;
-    }
+    if(maxX <= minY && maxY <= minX) {
+      const lowMax = Math.max(maxX, maxY)
+      if( (x + y) % 2 == 1)
+        return lowMax
+      return (lowMax + Math.min(minX, minY)) / 2
+    } else if(maxX < minY) {
+      low = partitionX + 1
+    } else
+      high = partitionX - 1
   }
 
-  return median([...result, ...numsA.slice(aI, aLen), ...numsB.slice(bI, bLen)]);
-}
+};
 
 module.exports = findMedianSortedArrays;
