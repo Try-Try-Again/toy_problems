@@ -4,6 +4,7 @@
   "description": "toy problems with TDD :D",
   "main": "index.js",
   "dependencies": {
+    "eslint-plugin-jest": "^23.17.1",
     "jest": "^26.0.1"
   },
   "devDependencies": {

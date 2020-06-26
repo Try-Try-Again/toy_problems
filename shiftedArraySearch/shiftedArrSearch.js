@@ -1,4 +1,31 @@
 /*
+ * findStart
+ * ---------
+ * Specification:
+ * Output:
+ * number
+ * Input:
+ * array of numbers
+ * Time Complexity:
+ * O(log(n))
+ * Spacial Complexity:
+ * O(1)
+ * Constraints:
+ * use binary search
+ * Edge Cases:
+ * test with start in each position in both an even length and odd length array
+ *
+ * Justification:
+ * need to start to so 'shiftedArraySearch' knows how shifted it's input array is
+ *
+ * Explanation:
+ * Given a shifted array of numbers, find the lowest number in the the array
+ *
+ * Visualization:
+ *
+ *
+ * shiftedArraySearch
+ * ------------------
  * Specification:
  * Output:
  * number
@@ -26,82 +53,42 @@
  * Assume that the offset can be any value between 0 and arr.length - 1.
  *
  * Visualization:
- * ---
  *
  * Approximation
- * start = 0
- * middle = len(array) // 2
- * end = len(array) - 1
+ * findStart(nums):
+ *   findMid = (start, end) => (end - start + 1) // 2 + start
+ *   start = 0
+ *   end = length(nums) - 1
+ *   mid = findMid(start, end)
  *
- * while start < end:
- *   if array[start] == target:
- *     return start
- *   if array[middle] == target:
- *     return middle
- *   if array[end] == target:
- *     return end
- *
- *   if
- *   array[start] < target < array[middle] //no negatives
- *   or  start < target and target !< middle and start !< middle
- *   or  start !< target and target < middle and start !< middle
- *   or  start !< target and target !< middle and start < middle
- *   (array[start] > tartget && array[start] > array[middle]):
- *     end = middle + 1
- *     middle = end // 2
- *   else
- *     start = middle
- *     middle = start + (end - start // 2)
- *
- * return false
+ *   while !(nums[start] <= nums[mid] <= nums[end]):
+ *     if mid == start or mid == end:
+ *       return mid
+ *     start, mid, end = nums[start] <= nums[mid]
+ *       ? mid, findMid(mid, end), end
+ *       : start, findMid(start, mid), mid
+ *   return start
  */
-
-const shiftedArrSearch = (nums, target) => {
-  //console.log(nums, target);
-  if (nums[0] === target) {
-    return 0;
-  }
+const findStart = (nums) => {
+  const findMid = (start, end) => Math.floor((end - start + 1) / 2) + start;
   let start = 0;
-  let middle = Math.floor(nums.length / 2);
   let end = nums.length - 1;
+  let mid = findMid(start, end);
 
-  while (start < end) {
-//    console.log(start, middle, end);
-//    console.log(nums[start], nums[middle], nums[end]);
-//    console.log(nums.slice(start, end));
-    if (nums[start] === target) {
-      return start;
+  while (!nums[start] <= nums[mid] <= nums[end]) {
+    if (mid === start || mid === end) {
+      return mid;
     }
-    if (nums[middle] === target) {
-      return middle;
-    }
-    if (nums[end] === target) {
-      return end;
-    }
-    if (end - start < 3) {
-      return -1;
-    }
-    if (
-      nums[start] < target < nums[middle]
-      // || (nums[start] > target && target < nums[middle] && nums[start] > nums[middle])
-      //|| (nums[start] > target && target > nums[middle] && nums[start] < nums[middle])
-      //|| (nums[start] < target && target > nums[middle] && nums[start] > nums[middle])
-    ) {
-      end = middle + 1; // - 1;
-      middle = Math.floor(end / 2);
-    } else {
-      start = middle; // + 1;
-      middle = start + Math.floor((end - start) / 2) + 1;
-    }
+    [start, mid, end] = nums[start] <= nums[mid]
+      ? [mid, findMid(mid, end), end]
+      : [start, findMid(start, mid), mid]
+    console.log(start, mid, end);
   }
+  return start;
+}
 
-  return -1;
-};
+console.log(findStart([1, 2, 3, 4, 5, 6, 7, 8, 9, 10]));
+//const shiftedArrSearch = (nums, target) => {
+//};
 
-//console.log(shiftedArrSearch([4,5,6,7,0,1,2], 1));
-
-module.exports = shiftedArrSearch;
-
-
-
-
+module.exports = { findStart };
