@@ -1,0 +1,68 @@
+"""
+A -> 1
+B -> 2
+
+   *
+112 -> [1, 1, 2], [11,2], [1, 12]
+
+1270 ->
+1 ->
+
+1 -> 1
+  -> 12
+11 -> 2
+
+
+fn(0) ->3
+
+way1 = fn(1) = 2
+way2 = fn(2) = 1
+
+fn(1) -> 2
+way1 = fn(2) = 1
+way2 = 1
+
+fn(2) -> 1
+
+
+fn(ind) -> number of ways you can decode
+how to recurse
+- look at current -> x
+- look at current + next; <= 26 - > fn() -> y
+- return x+y
+
+terminate
+- ind > len(S)-1:
+  return 1
+
+
+112
+
+"""
+
+
+def decodeVariations(S):
+  def fn(ind):
+    if ind in cache:
+      return cache[ind]
+    if ind == len(S)-1:
+      cache[ind] = 1
+      return cache[ind]
+    elif ind >= len(S):
+      cache[ind] = 0
+      return cache[ind]
+    way1 = fn(ind+1)
+    if int(S[ind:ind+2]) <= 26:
+      if ind+2 == len(S):
+        way2 = 1
+      else:
+        way2 = fn(ind+2)
+    else:
+      way2 = 0
+    cache[ind] = way1 + way2
+    return cache[ind]
+  cache = {}
+  return fn(0)
+
+#print(decodeVariations('112'))
+
